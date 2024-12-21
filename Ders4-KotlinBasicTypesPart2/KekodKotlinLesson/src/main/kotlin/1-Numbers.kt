@@ -116,6 +116,11 @@ fun main() {
     //Integer'lar için sayısal değerlerin nullable olması durumunda eğer byte aralığının(-128~127) içerisinde iseniz bu durumda özel optimizasyonlar sizin aynı referans aralığına işaret ettiğinizi gösteriyor. Farklı değişkenler gibi gözükseler bile bunlar aslında aynı değişkenler oluyor. Aralık dışında ise farklı memory alanlarına işaret ediyor demektir.
 
 
+    //Backend'ten dönen Double ve Float değişkenleri kullanırken dikkatli olmanız gerekiyor.
+    //Eğer Backend'ten dönen değer üzerinde "." işaretine göre bir split işi yapacaksanız başınız ağrıyabilir.
+    //Çünkü backend'ten dönen Double ve Float değişkenleri her zaman "." ile ayrışmıyor olabilir.
+    //Database dilinin farklı olmasına göre (türkçe - ingilizce gibi) "." yerine "," ile de ayrışıyor olabilir.
+
 }
 //region Mülakat Soruları
 //4.Type Inference nedir?
