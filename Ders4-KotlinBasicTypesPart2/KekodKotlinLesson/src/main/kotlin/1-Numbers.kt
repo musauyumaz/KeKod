@@ -92,8 +92,37 @@ fun main() {
     val bytes = 0b01000011_01101111_01100100_01100101_01101101_01111001
 
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //Primitive tipler kotlinde class'larla temsil edilirler. Biz bir Int değişken oluşturduğumuzda bu bir class. Class dediğimiz yapı da bir yapı primitive değil. Primitive tiplerin class olarak görünmesine rağmen özel optimizasyonlarla bytecode'a çevrilirken primitive hallerini kullanıyoruz. Ama bunun bir istisnası var. Eğer ki siz primitive bir değişkeni nullable yapıyorsanız yani bu artık null değer de alacak diyorsanız bu arkadaşın temsili artık primitive tip olarak değil class tiplerine dönüşür.
+
+    //Bir değişken primitive bir tip olsa bile kotlin'de nullable değer alıyorsa nullable olabiliyorsa bu artık class'a tekabül ediyor olacaktır. Bu hem değişkenin kapladığı alanı değiştirir. Buna erişim hızını değiştirir. Hem de referansları değişir. Yani gereksiz nullable(?) operatörünü kullanmayın.
+
+    //Boxed   : Değişkenin obje referansı olarak tutulmasıdır.
+    //UnBoxed : Değişkenin primitive olarak tutulmasıdır.
+    // === Operatörü değişkenlerin referansını karşılaştırırken kullanılır.
+    // == operatörü değişkenlerin değerini karşılaştırırken kullanılır.
+
+    val number: Int = 127//int
+    val boxedNumber: Int? = number
+    val anotherBoxedNumber: Int? = number
+    println(boxedNumber === anotherBoxedNumber) //true
+
+    val number2: Int = 128
+    val boxedNumber2: Int? = number2
+    val anotherBoxedNumber2: Int? = number2
+    println(boxedNumber2 === anotherBoxedNumber2) //false
+
+    //nullable numberlar işin içine girdiğinde eğer ki kontrol ettirdiğiniz değerin kendisi -128 ile 127 arasında ise yani verdiğiniz değer byte aralığı içindeyse bu referans tipli bir class'ın objesi bile olsa referans kontrollerinde özel optimizasyonlar sebebiyle aynı alana işaret ediyorsunuz. Yani -128 ~ 127 aralığında bir sayı kullanıyorsanız bunlar nullable Int olsa bile halen küçük int(primitive) gibi davranıyorlar.
+    //Integer'lar için sayısal değerlerin nullable olması durumunda eğer byte aralığının(-128~127) içerisinde iseniz bu durumda özel optimizasyonlar sizin aynı referans aralığına işaret ettiğinizi gösteriyor. Farklı değişkenler gibi gözükseler bile bunlar aslında aynı değişkenler oluyor. Aralık dışında ise farklı memory alanlarına işaret ediyor demektir.
+
+
 }
 //region Mülakat Soruları
-// .Type Inference nedir?
+//4.Type Inference nedir?
 //Eşitliğin karşı tarafında bir value varsa siz o değişkenin değişken tipini vermeseniz bile eşitliğin diğer tarafındaki değere bakarak değişkenin tipinin ne olacağına IDE karar verebilir. Bir değişken tipinin eşitliğin sağ tarafına bakarak belirlenmesi işlemine type inference(tip çıkarma) denir. Ama sayısal değerlerde verilen değer eğer Int değer aralığında ise Int set edilir Int değer aralığından daha büyükse Long set edilir.
+
+//5. === operatörü neyi kontrol eder? == operatörü neyi kontrol eder?
+//== size değişkenlerin değerlerini yani value'sunu === ise bunların memory'deki referanslarını kontrol ettirir. memory'deki referans dediğimiz şey siz her bir değişken oluşturduğunuzda hani o bilgisayarlarımızda ram dediğimiz bir alan var ya onların içerisinde ne kadarlık yer kapladıklarını ve hangi adreste yer kapladıklarını söylüyorsunuz.
+
+//6. Kotlin'de primitive tipteki değişken nullable yapılır ve === ile kontrol edilirse nasıl bir sonuç alırsınız?
 //endregion
