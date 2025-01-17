@@ -2,9 +2,9 @@ package functions
 
 fun main() {
     calculate2(2, 54) { numberOne, numberTwo ->
-        if (numberTwo == 0) {
-            return
-        }
+//        if (numberTwo == 0) {
+//            return
+//        }
         numberOne / numberTwo
     }
 }
