@@ -1,8 +1,13 @@
 package classes
 
-class Turtle(mName: String = "Tosbik", mFeetCount: Int = 4) {
-    var feetCount: Int = mFeetCount
-    val feetColor: String = "Brown"
+class Turtle(val Name: String = "Tosbik", var feetCount: Int = 4) {
+    var feetColor: String = "Brown"
+        set(value) {
+            field = value
+        }
+        get(): String {
+            return field
+        }
     val headCount: Int = 1
     val headColor: String = "Brown"
     val shelterColor: String = "Green"
@@ -10,17 +15,15 @@ class Turtle(mName: String = "Tosbik", mFeetCount: Int = 4) {
     val tailColor: String = "Brown"
     val age: Int = 1
     val sex: String = "Female"
-    var name: String = mName
     val isMarried: Boolean = true
 
     init {
         println("Primary constructor created")
     }
 
-//    constructor(isMarried: Boolean = true) : this() {
-//        this.isMarried = isMarried
-//        println("Secondary constructor created")
-//    }
+    constructor(isMarried: Boolean) : this() {
+        println("Secondary constructor created")
+    }
 
     constructor(mName: String = "Tosbik", mFeetCount: Int = 4, isMarried: Boolean = true) : this(mName, mFeetCount) {
         println("Secondary constructor created")
@@ -35,7 +38,7 @@ class Turtle(mName: String = "Tosbik", mFeetCount: Int = 4) {
     }
 
     fun walk(): Unit {
-
+        feetCount
     }
 
     fun swim(): Unit {
@@ -45,9 +48,11 @@ class Turtle(mName: String = "Tosbik", mFeetCount: Int = 4) {
 
 fun main() {
     val turtleOne: Turtle = Turtle()
+    turtleOne.feetCount = 3
     val turtleTwo: Turtle = Turtle("Murtle")
     val turtleThree: Turtle = Turtle(mFeetCount = 4)
     val turtleFour: Turtle = Turtle("", 4)
     val turtleFive: Turtle = Turtle("", 4, false)
+    val turtleSix: Turtle = Turtle(false)
     turtleOne.walk()
 }

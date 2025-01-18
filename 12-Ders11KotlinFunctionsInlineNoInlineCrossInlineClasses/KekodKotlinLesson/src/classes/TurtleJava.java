@@ -18,17 +18,17 @@ public class TurtleJava {
         this.name = name;
     }
 
-    int feetCount = 4;
-    String feetColor = "Brown";
-    int headCount = 1;
-    String headColor = "Brown";
-    String shelterColor = "Green";
-    int tailCount = 1;
-    String tailColor = "Brown";
-    int age = 1;
-    String name = "Tosbik";
-    String sex = "Female";
-    boolean isMarried = true;
+    private int feetCount = 4;
+    private String feetColor = "Brown";
+    private int headCount = 1;
+    private String headColor = "Brown";
+    private String shelterColor = "Green";
+    private int tailCount = 1;
+    private String tailColor = "Brown";
+    private int age = 1;
+    private String name = "Tosbik";
+    private String sex = "Female";
+    private boolean isMarried = true;
 
     String makeASount() {
         return "sadsadsa";
