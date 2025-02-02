@@ -61,6 +61,29 @@ class Constructors {
     constructor(i: Int) {
         println("Constructor $i")
     }
+
+    fun asdsadad(): Unit {
+
+    }
 }
 
 class DontCreateMe private constructor() {}
+
+abstract class Polygon {
+    abstract fun draw()
+}
+
+class Rectangle : Polygon() {
+    override fun draw() {
+    }
+}
+
+open class Polygon2 {
+    open fun draw() {
+
+    }
+}
+
+abstract class WildShape : Polygon2() {
+    abstract override fun draw()
+}
