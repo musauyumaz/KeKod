@@ -1,3 +1,5 @@
+import TextWatcher.Companion.name
+
 interface TextWatcher {
     fun onTextChanged()
     fun beforeTextChanged()
@@ -6,19 +8,27 @@ interface TextWatcher {
     fun funWithBody(): Unit {
 
     }
-}
 
-interface ChildInterface : TextWatcher{
-    override fun onTextChanged() {
+    companion object{
+        var name: String = "Musa"
     }
 }
 
-class InterfaceSample : ChildInterface{
+interface ChildInterface : TextWatcher{
+    override fun onTextChanged() {}
+    override fun beforeTextChanged() {}
+    override fun afterTextChanged() {}
+}
+
+class InterfaceSample() : ChildInterface{
     override fun beforeTextChanged() {
     }
 
     override fun afterTextChanged() {
     }
+
+    var text: String = "asdsada"
+
 
 }
 
@@ -40,6 +50,10 @@ fun main() {
 
         override fun funWithBody() {
             super.funWithBody()
+
+            name
         }
     }
+
+
 }
