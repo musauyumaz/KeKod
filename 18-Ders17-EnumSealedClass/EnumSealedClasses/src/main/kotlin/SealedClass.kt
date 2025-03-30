@@ -32,9 +32,24 @@ package org.example
 * direct class'lar enum class dışında diğer class türleri olabilirler. sealed, inner, abstract, data olabilir ancak enum class olamamasının sebebi; enum class'lar bir başka class'ı miras alamazlar. Ama sealed class'ların sub class'ları açık bir şekilde zaten sealed class'ı alabilmelilerdi.
 *
 * Enum class'lar ve sabitleri özünde class oldukları için toString, hashcode, equals gibi fonksiyonlşarı override edevbilirsiniz.
+*
+* Java 15'den sonra sealed class'lara benzer permits keyword'ü kullana yapılar Java'ya eklendi Aynı işi yapıyorlar.
+*
+* direct class'lar enumlarda olduğu gibi static değillerdirler.(sealed class scopee'u içinde kullanılıyorlarsa static olurlar.) Ama özünde static olmadıkları için klullanılırken nesneleri üretilmesi gerekmektedir.
+* direct class'ların birden fazxla nesnesi oluşturulabilir. Enumn'larda sabitler tek bir nesne olarak memory'de tutulurlar.
+*
+* Sealed class'lar aynı module veya package içerisinde geçerlidir. Farklı moduller tarafından görülemezler.
+*
+* Sealed class'ların direct class'ları compile time'da biliniyor.
 * */
 
 sealed class Errors constructor(val errorCode: Int) : A1(), B1 {
+    object RuntimeError : Errors(600) {
+        override fun someMethod(): String {
+            TODO("Not yet implemented")
+        }
+    }
+
     abstract class NoInternet(val errorMessage: String) : Errors(100), SomeInterface2 {
         override fun someMethod(): String {
             TODO("Not yet implemented")
@@ -47,10 +62,24 @@ sealed class Errors constructor(val errorCode: Int) : A1(), B1 {
         fun specialFun() {
 
         }
+
         open fun specialFun2() {
 
         }
+
         abstract fun specialFun3()
+
+        override fun hashCode(): Int {
+            return super.hashCode()
+        }
+
+        override fun toString(): String {
+            return super.toString()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            return super.equals(other)
+        }
     }
 
     class ServerError : Errors(200) {
@@ -86,6 +115,10 @@ interface SomeInterface2 {
     fun soo()
 }
 
+sealed interface Abc{
+
+}
+
 open class A1
 
 open class C1 : Errors(1) {
@@ -104,4 +137,8 @@ interface B1 {
 
 fun main() {
 //    val error : Errors()
+    val serverError: Errors.ServerError = Errors.ServerError()
+    println(serverError.errorCode)
+
+
 }
