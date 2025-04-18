@@ -16,6 +16,7 @@ public class SingletonObject {
         System.out.println(baseUrl);
         System.out.println(baseUrl2);*/
 
-        Retrofit baseUrl = Retrofit.getNewInstance();
+        Retrofit retrofit = Retrofit.getNewInstance();
+        Retrofit retrofit2 = Retrofit.getNewInstance();
     }
 }

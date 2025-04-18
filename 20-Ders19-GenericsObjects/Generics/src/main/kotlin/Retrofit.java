@@ -1,10 +1,11 @@
 public class Retrofit {
     private String baseUrl = "www.google.com";
-    private static Retrofit newInstance;
+    private volatile static Retrofit newInstance;
 
-    private Retrofit(){
+    private Retrofit() {
 
     }
+
     public String getBaseUrl() {
         return baseUrl;
     }
@@ -13,8 +14,9 @@ public class Retrofit {
         this.baseUrl = baseUrl;
     }
 
-    public static Retrofit getNewInstance(){
-        newInstance = new Retrofit();
+    public synchronized static Retrofit getNewInstance() {
+        if (newInstance == null)
+            newInstance = new Retrofit();
         return newInstance;
     }
 }
