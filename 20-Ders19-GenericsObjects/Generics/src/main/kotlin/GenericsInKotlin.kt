@@ -93,7 +93,7 @@ fun demo() {
     val any = Array<Any>(3) { "" }
     //Array<T> bu durum için Array<Int> invariant durumunda yani değişmez.
     //Yani ne Array<Int> ne de Array<Any> birbirinin subtype'ı değildir. Niye değildir. Çünkü daha önce konuştuüumuz gibi copy'de beklenmedik durum olauşabilir. Şöyle ki siz String bir array'i Int bir Array'in için kopyalamaya çalışabilirdiniz
-    copy(ints, any)
+//    copy(ints, any)
 
     //copy2'deki kullanıma baktığınızda bunu artık yapabilirsiniz. Buna Type-Projection diyoruz.
     //copy2'deki Array<out Any> ifadesi Java'faki Array<? extends Object> karşılığı oluyor.
