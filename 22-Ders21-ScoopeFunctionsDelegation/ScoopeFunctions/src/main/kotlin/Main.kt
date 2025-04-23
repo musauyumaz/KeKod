@@ -39,8 +39,11 @@ fun main() {
 
     println(returnValueWith)
 
-    name?.apply {
-        println("apply")
+    // T = Önüne gelen değişken
+    // R = yok, Çünkü high order function'ın geri dönüş değeri yok. Onun yerine T geri döndürülüyor.
+    //Lambda param = yok, this = T
+    val returnValueApply = name?.apply {
+        println("apply $this")
     }
     name?.also {
         println("also")
