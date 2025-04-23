@@ -1,5 +1,7 @@
 package org.example
 
+import java.awt.image.renderable.ParameterBlock
+
 fun main() {
     val name: String? = "Musa"
 
@@ -41,12 +43,26 @@ fun main() {
 
     // T = Önüne gelen değişken
     // R = yok, Çünkü high order function'ın geri dönüş değeri yok. Onun yerine T geri döndürülüyor.
-    //Lambda param = yok, this = T
+    //Lambda param = T, (this = T, çünkü extension function)
     val returnValueApply = name?.apply {
-        println("apply $this")
+        println("apply  $this")
     }
-    name?.also {
-        println("also")
+
+    // T = Önüne gelen değişken
+    // R = yok, Çünkü high order function'ın geri dönüş değeri yok. Onun yerine T geri döndürülüyor.
+    //Lambda param = yok, this = yok, çünkü extension yok
+    val returnValueAlso = name?.also { name: String ->
+        println("also $name")
+    }
+
+    println(returnValueAlso)
+
+    name.takeIf {
+        true
+    }
+
+    name.takeUnless {
+        true
     }
 }
 
@@ -64,4 +80,14 @@ inline fun <R> run(block: () -> R): R {
 
 inline fun <T, R> with(receiver: T, block: T.() -> R): R {
     return receiver.block()
+}
+
+inline fun <T> T.apply(block: T.() -> Unit): T {
+    block()
+    return this
+}
+
+inline fun <T> T.also(block: (T) -> Unit): T {
+    block(this)
+    return this
 }
