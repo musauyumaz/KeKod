@@ -1,11 +1,10 @@
 package org.example
 
-import com.sun.jdi.Value
-import javax.xml.crypto.Data
-import kotlin.reflect.KProperty
+import kotlin.concurrent.thread
 
 /*
-* Değerlendirme (Evaluation): by lazy ile tanımlanan bir değişken ilk erişildiğinde değerlendirilir ve değeri hesaplanır. Sonraki erişimlerde ise hesaplanan değer doğrudan döndürülür. Bu özellikle hesaplaması maliyetli veya zaman alan işlemler için performans avantajı sağlar.
+* Değerlendirme (Evaluation): by lazy ile tanımlanan bir değişken ilk erişildiğinde değerlendirilir ve değeri hesaplanır. Sonraki erişimlerde ise hesaplanan değer doğrudan döndürülür.
+* Bu özellikle hesaplaması maliyetli veya zaman alan işlemler için performans avantajı sağlar.
 *
 * Null Safety: by lazy ile tanımlanan değişkenler null olamaz (non-nullable).
 * Bu güvenli bir şekilde kullanılabileceklerini garanti eder.
@@ -15,45 +14,67 @@ import kotlin.reflect.KProperty
 * Kullanım Durumu: Genellikle hesaplanması maliyetli olan ancak her zaman kullanılamyabilecek değerler için tercih edilir. Örneğin bir konfigürasyon dosyasını okumak veya bir ağ isteği yapmak gibi işlemler için idealdir.
 * */
 
-//Seperation of Concern - User sınıfı verileri yönetirken, Delegate sınıf veritabanı işlerini, Database sınıfı ise veritabanı implementasyonunu yönetir.
-class Database {
-    private val data = mutableMapOf<String, String>()
-
-    fun saveData(key: String, value: String) {
-        data[key] = value
-        println("Saved '$value' with key '$key' to the database")
-    }
-
-    fun loadData(key: String): String {
-        return data[key] ?: "No data found"
+class Foo {
+    init {
+        println("Object initialized")
     }
 }
 
-//eğer DB'de bir değişiklik olkursa user sınıfı bu değişikliği bilmek zorunda değil, sadece Delegate sınıfta düzenleme yapılır.
-class DatabaseDelegate(private val db: Database, private val key: String) {
-    operator fun getValue(thisRef: Any?, property: KProperty<*>): String {
-        return db.loadData(key)
+fun demo() {
+    val lazyObject: Foo by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        println("Lazy object initialized")
+        Foo()
     }
 
-    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: String) {
-        db.saveData(key, value)
+    /*
+    * SYNCHRONIZED: lazy değerine ilk erişimde tüm thread'leri bloklar ve value alanının oluşturulmasını tek bir tek bir thread'e sınırlar
+    * Default yöntem budur.
+    *
+    * PUBLICATION: value alanının oluşturulmasında tek bir thread'e sınırlama getirmez.
+    * Birden fazla thread, value alanını aynı anda oluşturabilir. ancak oluşturma işlemi tamamlandıktan sonra sadece bir thread'e value alanına erişim izni verilir. Diğer thread'ler oluşturma işlemi tamamlanana kadar bekler.
+    *
+    * NONE: thread güvenliği sağlamaz. Birden fazla thread, aynı anda value alanı alanını oluşturabilir ve bu oluşturma sırasında herhangi bir senkronizasyon yapılmaz bu nedenle bu mod, yalnızca tek thread'in erişimine uygun durumlarda kullanılmalıdır.
+    * */
+
+
+    val lazyObject2: Foo by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        Foo()
     }
+    //ilk erişimde init bloğu çalışır
+    println("First Access: ")
+    println(lazyObject)
+
+    //İkinci erişimde init bloğu çalışmaz, önceki nesne döndürülür.
+    println("Second access:")
+    println(lazyObject)
 }
 
-//User sınıfı veritabanı implementasyonundan haberdar değil. encapsulation
-class User(db: Database) {
-    var name: String by DatabaseDelegate(db, "name")
-    var email: String by DatabaseDelegate(db, "email")
+class LazyPublicationExample {
+    var count = 0
+    val lazyValue: Int by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        println("Lazy value is being computed.")
+
+        Thread.sleep(2000)
+        ++count
+    }
 }
 
 fun main() {
-    val database = Database()
-    val user = User(database)
 
+//    demo()
 
-    user.name = "Musa"
-    user.email = "musa.uyumaz73@gmail.com"
+    val example = LazyPublicationExample()
 
-    println("User name: ${user.name}")
-    println("User email: ${user.email}")
+    //ilk erişimde değer hesaplanır
+    val thread1 = thread { println("Thread 1: ${example.lazyValue}") }
+
+    //İkinci erişimde değer tekrar hesaplanmaz, daha önceki değer kullanılır.
+    val thread2 = thread { println("Thread 2: ${example.lazyValue}") }
+
+    val thread3 = thread { println("Thread 3: ${example.lazyValue}") }
+
+    //Thread'lerin tamamlanmasını bekler.
+    thread1.join()
+    thread2.join()
+    thread3.join()
 }
