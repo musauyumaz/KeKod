@@ -6,8 +6,8 @@ import kotlin.concurrent.thread
 * Değerlendirme (Evaluation): by lazy ile tanımlanan bir değişken ilk erişildiğinde değerlendirilir ve değeri hesaplanır. Sonraki erişimlerde ise hesaplanan değer doğrudan döndürülür.
 * Bu özellikle hesaplaması maliyetli veya zaman alan işlemler için performans avantajı sağlar.
 *
-* Null Safety: by lazy ile tanımlanan değişkenler null olamaz (non-nullable).
-* Bu güvenli bir şekilde kullanılabileceklerini garanti eder.
+* Null Safety: by lazy ile tanımlanan değişkenler null olabilir(nullable) Bu nedenle kullanmadan önce değerinin null olup olmadığına bakmanız gerekebilir.
+
 *
 * Thread Safety: by lazy varsayılan olarak thread-safe'dir. Yani aynı değişkene birden fazla thread aynı anda eriştiğinde doğru değer güvenli bir şekilde döndürülür.
 *
